@@ -12,6 +12,11 @@ import { ChartService } from './chart.service';
 import { Chart } from './schemas/chart.schema';
 import { CreateChartDto } from './dto/create-chart.dto';
 import { UpdateChartDto } from './dto/update-chart.dto';
+import * as echarts from 'echarts';
+import { createCanvas } from 'canvas';
+// import * as fs from 'fs';
+// import { JSDOM } from 'jsdom';
+// import canvas2image from 'canvas2image';
 
 @Controller('charts')
 export class ChartController {
@@ -24,7 +29,40 @@ export class ChartController {
 
   @Get('generate')
   async generateChart(@Res() res) {
-    return this.chartService.generateChart();
+    const canvas: any = createCanvas(600, 400);
+    canvas.getContext('2d');
+
+    const chart = echarts.init(canvas);
+    const options = {
+      title: {
+        text: 'ECharts Example',
+      },
+      xAxis: {
+        type: 'category',
+        data: [
+          'Category A',
+          'Category B',
+          'Category C',
+          'Category D',
+          'Category E',
+        ],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          data: [120, 200, 150, 80, 70],
+          type: 'bar',
+        },
+      ],
+    };
+
+    chart.setOption(options);
+
+    const buffer = canvas.toBuffer('image/png');
+    res.set({ 'Content-Type': 'image/png' });
+    res.send(buffer);
   }
 
   @Post()
