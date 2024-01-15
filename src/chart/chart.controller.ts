@@ -50,14 +50,16 @@ export class ChartController {
     if (this.chartData.length === 0)
       return res.status(HttpStatus.CONFLICT).send('No data found.');
     const canvas: Canvas = createCanvas(1000, 600);
-    const chart = echarts.init(canvas as unknown as HTMLElement, "dark");
+    const chart = echarts.init(canvas as unknown as HTMLElement, 'dark');
 
     try {
       const options = (() => {
         switch (id.toLowerCase()) {
           case 'waterfall':
+          case 'waterfall.jpg':
             return this.chartService.generateWaterfallOptions(this.chartData);
           case 'negative':
+          case 'negative.jpg':
             return this.chartService.generateNegativeOptions(this.chartData);
           default:
             return this.chartService.generateGroupedOptions(this.chartData);
@@ -66,6 +68,7 @@ export class ChartController {
       chart.setOption(options);
       const buffer = canvas.toBuffer('image/jpeg');
       res.set({ 'Content-Type': 'image/jpeg' });
+      res.set({ 'Mime-Type': 'image' });
       res.send(buffer);
     } catch (e) {
       return res
@@ -118,8 +121,10 @@ export class ChartController {
       const options = (() => {
         switch (id.toLowerCase()) {
           case 'waterfall':
+          case 'waterfall.jpg':
             return this.chartService.generateWaterfallOptions(body);
           case 'negative':
+          case 'negative.jpg':
             return this.chartService.generateNegativeOptions(body);
           default:
             return this.chartService.generateGroupedOptions(body);
