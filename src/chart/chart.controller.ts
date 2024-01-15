@@ -50,11 +50,7 @@ export class ChartController {
     if (this.chartData.length === 0)
       return res.status(HttpStatus.CONFLICT).send('No data found.');
     const canvas: Canvas = createCanvas(1000, 600);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fill();
-    const chart = echarts.init(canvas as unknown as HTMLElement);
+    const chart = echarts.init(canvas as unknown as HTMLElement, "dark");
 
     try {
       const options = (() => {
@@ -68,8 +64,8 @@ export class ChartController {
         }
       })();
       chart.setOption(options);
-      const buffer = canvas.toBuffer('image/png');
-      res.set({ 'Content-Type': 'image/png' });
+      const buffer = canvas.toBuffer('image/jpeg');
+      res.set({ 'Content-Type': 'image/jpeg' });
       res.send(buffer);
     } catch (e) {
       return res
@@ -130,8 +126,8 @@ export class ChartController {
         }
       })();
       chart.setOption(options);
-      const buffer = canvas.toBuffer('image/png');
-      res.set({ 'Content-Type': 'image/png' });
+      const buffer = canvas.toBuffer('image/jpeg');
+      res.set({ 'Content-Type': 'image/jpeg' });
       res.send(buffer);
     } catch (e) {
       return res
