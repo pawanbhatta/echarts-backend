@@ -207,7 +207,7 @@ export class ChartService {
           label: {
             show: true,
             position: 'outside',
-            fontSize:"12px",
+            fontSize:10,
             formatter: (value) => {
               return value.data[1].toFixed(2).toString();
             },
@@ -219,7 +219,7 @@ export class ChartService {
           label: {
             show: true,
             position: 'outside',
-            fontSize:"12px",
+            fontSize:10,
             formatter: (value) => {
               return value.data[2].toFixed(2).toString();
             },
