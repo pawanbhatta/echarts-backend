@@ -11,7 +11,9 @@ import { MongooseModule } from '@nestjs/mongoose';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    MongooseModule.forRoot('mongodb://0.0.0.0:27017/chart'),
+    MongooseModule.forRoot(
+      'mongodb+srv://pawanbhatta00:XClUlDtPQQt4XFoJ@cluster0.aycd45n.mongodb.net/',
+    ),
     ChartModule,
   ],
   controllers: [AppController],
