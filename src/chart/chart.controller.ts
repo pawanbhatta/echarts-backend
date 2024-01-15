@@ -130,6 +130,7 @@ export class ChartController {
             return this.chartService.generateGroupedOptions(body);
         }
       })();
+      
       chart.setOption(options);
       const buffer = canvas.toBuffer('image/jpeg');
       res.set({ 'Content-Type': 'image/jpeg' });
