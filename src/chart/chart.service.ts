@@ -57,8 +57,8 @@ export class ChartService {
       function addHelper(num: number, color: string = '#0000') {
         helper.push({ value: num, itemStyle: { color: color } });
       }
-      for (var i = 0; i < seriesData.length; ++i) {
-        var increasing =
+      for (let i = 0; i < seriesData.length; ++i) {
+        let increasing =
           (seriesData[i].itemStyle.color === positiveColor && netChange > 0) ||
           (seriesData[i].itemStyle.color === negativeColor && netChange < 0);
 
@@ -93,7 +93,7 @@ export class ChartService {
       }
       const net = new Array(helper.length).fill(0);
       net.push({
-        value: helper[i - 1].value,
+        value: helper[seriesData.length - 1].value,
         itemStyle: { color: '#000' },
         label: {
           position: 'top',
