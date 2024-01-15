@@ -101,6 +101,68 @@ export class ChartController {
     //   ],
     // };
   }
+  @Post('generate/:id')
+  async generateChartFromBody(
+    @Res() res: Response,
+    @Param('id') id: string,
+    @Body() body,
+  ) {
+    console.log(id, body.length === 0);
+    if (!id) return res.status(404).send('No id sent.');
+    if (body.length === 0)
+      return res.status(HttpStatus.CONFLICT).send('No data found.');
+    const canvas: Canvas = createCanvas(1000, 600);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
+    const chart = echarts.init(canvas as unknown as HTMLElement);
+
+    try {
+      const options = (() => {
+        switch (id.toLowerCase()) {
+          case 'waterfall':
+            return this.chartService.generateWaterfallOptions(body);
+          case 'negative':
+            return this.chartService.generateNegativeOptions(body);
+          default:
+            return this.chartService.generateGroupedOptions(body);
+        }
+      })();
+      chart.setOption(options);
+      const buffer = canvas.toBuffer('image/png');
+      res.set({ 'Content-Type': 'image/png' });
+      res.send(buffer);
+    } catch (e) {
+      return res
+        .status(HttpStatus.FAILED_DEPENDENCY)
+        .send('Data validataion failed');
+    }
+    // const options = {
+    //   title: {
+    //     text: 'ECharts Example',
+    //   },
+    //   xAxis: {
+    //     type: 'category',
+    //     data: [
+    //       'Category A',
+    //       'Category B',
+    //       'Category C',
+    //       'Category D',
+    //       'Category E',
+    //     ],
+    //   },
+    //   yAxis: {
+    //     type: 'value',
+    //   },
+    //   series: [
+    //     {
+    //       data: [120, 200, 150, 80, 70],
+    //       type: 'bar',
+    //     },
+    //   ],
+    // };
+  }
 
   // @Post()
   // async createChart(
