@@ -102,37 +102,37 @@ export class ChartController {
     // };
   }
 
-  @Post()
-  async createChart(
-    @Body()
-    chart: CreateChartDto,
-  ): Promise<Chart> {
-    return this.chartService.create(chart);
-  }
+  // @Post()
+  // async createChart(
+  //   @Body()
+  //   chart: CreateChartDto,
+  // ): Promise<Chart> {
+  //   return this.chartService.create(chart);
+  // }
 
-  @Get(':id')
-  async getChartById(
-    @Param('id')
-    id: string,
-  ): Promise<Chart> {
-    return this.chartService.findById(id);
-  }
+  // @Get(':id')
+  // async getChartById(
+  //   @Param('id')
+  //   id: string,
+  // ): Promise<Chart> {
+  //   return this.chartService.findById(id);
+  // }
 
-  @Put(':id')
-  async updateChart(
-    @Param('id')
-    id: string,
-    @Body()
-    chart: UpdateChartDto,
-  ): Promise<Chart> {
-    return this.chartService.update(id, chart);
-  }
+  // @Put(':id')
+  // async updateChart(
+  //   @Param('id')
+  //   id: string,
+  //   @Body()
+  //   chart: UpdateChartDto,
+  // ): Promise<Chart> {
+  //   return this.chartService.update(id, chart);
+  // }
 
-  @Delete(':id')
-  async deleteChart(
-    @Param('id')
-    id: string,
-  ): Promise<Chart> {
-    return this.chartService.delete(id);
-  }
+  // @Delete(':id')
+  // async deleteChart(
+  //   @Param('id')
+  //   id: string,
+  // ): Promise<Chart> {
+  //   return this.chartService.delete(id);
+  // }
 }
