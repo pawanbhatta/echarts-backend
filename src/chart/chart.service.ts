@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Chart } from './schemas/chart.schema';
 import * as Mongoose from 'mongoose';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, color } from 'echarts';
 
 @Injectable()
 export class ChartService {
@@ -166,7 +166,7 @@ export class ChartService {
     };
     return option;
   }
-  generateGroupedOptions(data: any) {
+  generateGroupedOptions(data: any): EChartsOption {
     const keys = Object.keys(data[0]);
     const mappedDataSet = data.map((d, i) => {
       return [d[keys[0]], d[keys[1]], d[keys[2]]];
@@ -175,43 +175,28 @@ export class ChartService {
       grid: {
         top: '10%',
         bottom: '20%',
-        backgroundColor: 'white',
+        backgroundColor: color.stringify([255, 255, 255], 'rgb'),
+        containLabel: true,
       },
       dataset: {
         source: mappedDataSet,
       },
       yAxis: {
         type: 'category',
+        data: mappedDataSet.map((d) => d[0]),
         inverse: true,
-        axisLine: {
-          show: false,
-        },
-        axisLabel: {
-          show: false,
-        },
-        axisTick: {
-          show: false,
-        },
       },
       xAxis: {
         type: 'value',
         axisLabel: {
-          // formatter: (value) => {
-          //   return value + (options.valuePostfix ?? '');
-          // },
+          formatter: (value) => {
+            return `${value}`;
+          },
         },
         axisLine: {
           show: true,
           lineStyle: {
             width: 2,
-          },
-        },
-        interval: 10,
-        splitLine: {
-          show: true,
-          interval: 5,
-          lineStyle: {
-            type: 'dashed',
           },
         },
       },
