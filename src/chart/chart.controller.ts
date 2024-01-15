@@ -33,6 +33,7 @@ export class ChartController {
   @Post('data')
   addChartData(@Res() res: Response, @Body() body) {
     try {
+      console.log('body : ++++++++++++', body);
       const data = body;
       this.chartData = data;
       res.status(200).json(data);
@@ -48,7 +49,7 @@ export class ChartController {
     if (!id) return res.status(404).send('No id sent.');
     if (this.chartData.length === 0)
       return res.status(HttpStatus.CONFLICT).send('No data found.');
-    const canvas: Canvas = createCanvas(600, 400);
+    const canvas: Canvas = createCanvas(1000, 600);
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#000';
     ctx.fillRect(0, 0, canvas.width, canvas.height);

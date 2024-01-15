@@ -53,12 +53,12 @@ export class ChartService {
     });
     const helperData2 = (() => {
       const helper: { value: number; itemStyle: { color: string } }[] = [];
-      // let acc = 0;
+      let acc = 0;
       function addHelper(num: number, color: string = '#0000') {
         helper.push({ value: num, itemStyle: { color: color } });
       }
-      for (let i = 0; i < seriesData.length; ++i) {
-        const increasing =
+      for (var i = 0; i < seriesData.length; ++i) {
+        var increasing =
           (seriesData[i].itemStyle.color === positiveColor && netChange > 0) ||
           (seriesData[i].itemStyle.color === negativeColor && netChange < 0);
 
