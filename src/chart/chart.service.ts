@@ -158,7 +158,13 @@ export class ChartService {
         {
           type: 'bar',
           stack: 'total',
-          label: { show: false, opacity: 0 },
+          label: {
+            show: false,
+            formatter: (value) => {
+              //@ts-expect-error
+              return value === 0 ? '' : `${value}`;
+            },
+          },
           tooltip: { show: true },
           data: helperData2.net,
         },
@@ -207,7 +213,7 @@ export class ChartService {
           label: {
             show: true,
             position: 'outside',
-            fontSize:10,
+            fontSize: 10,
             formatter: (value) => {
               return value.data[1].toFixed(2).toString();
             },
@@ -219,7 +225,7 @@ export class ChartService {
           label: {
             show: true,
             position: 'outside',
-            fontSize:10,
+            fontSize: 10,
             formatter: (value) => {
               return value.data[2].toFixed(2).toString();
             },
@@ -228,7 +234,7 @@ export class ChartService {
       ],
     };
   }
-  generateNegativeOptions(data: any) {
+  generateNegativeOptions(data: any): EChartsOption {
     const keys = Object.keys(data[0]);
     const mappedDataSet = data.map((d, i) => {
       return [d[keys[0]], d[keys[2]] - d[keys[1]]];
@@ -259,21 +265,13 @@ export class ChartService {
         type: 'value',
         axisLabel: {
           formatter: (value) => {
-            return value;
+            return `${value}`;
           },
         },
         axisLine: {
           show: true,
           lineStyle: {
             width: 2,
-          },
-        },
-        interval: 10,
-        splitLine: {
-          show: true,
-          interval: 5,
-          lineStyle: {
-            type: 'dashed',
           },
         },
       },
