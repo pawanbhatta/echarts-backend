@@ -1,18 +1,14 @@
 import {
   Body,
   Controller,
-  Delete,
   Get,
   HttpStatus,
   Param,
   Post,
-  Put,
   Res,
 } from '@nestjs/common';
 import { ChartService } from './chart.service';
 import { Chart } from './schemas/chart.schema';
-import { CreateChartDto } from './dto/create-chart.dto';
-import { UpdateChartDto } from './dto/update-chart.dto';
 import * as echarts from 'echarts';
 import { Canvas, createCanvas } from 'canvas';
 import { Response } from 'express';
@@ -75,31 +71,8 @@ export class ChartController {
         .status(HttpStatus.FAILED_DEPENDENCY)
         .send('Data validataion failed');
     }
-    // const options = {
-    //   title: {
-    //     text: 'ECharts Example',
-    //   },
-    //   xAxis: {
-    //     type: 'category',
-    //     data: [
-    //       'Category A',
-    //       'Category B',
-    //       'Category C',
-    //       'Category D',
-    //       'Category E',
-    //     ],
-    //   },
-    //   yAxis: {
-    //     type: 'value',
-    //   },
-    //   series: [
-    //     {
-    //       data: [120, 200, 150, 80, 70],
-    //       type: 'bar',
-    //     },
-    //   ],
-    // };
   }
+
   @Post('generate/:id')
   async generateChartFromBody(
     @Res() res: Response,
@@ -110,31 +83,11 @@ export class ChartController {
     if (!id) return res.status(404).send('No id sent.');
     if (body.length === 0)
       return res.status(HttpStatus.CONFLICT).send('No data found.');
-    const canvas: Canvas = createCanvas(1000, 600);
-    const ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fill();
-    const chart = echarts.init(canvas as unknown as HTMLElement);
 
     try {
-      const options = (() => {
-        switch (id.toLowerCase()) {
-          case 'waterfall':
-          case 'waterfall.jpg':
-            return this.chartService.generateWaterfallOptions(body);
-          case 'negative':
-          case 'negative.jpg':
-            return this.chartService.generateNegativeOptions(body);
-          default:
-            return this.chartService.generateGroupedOptions(body);
-        }
-      })();
-      
-      chart.setOption(options);
-      const buffer = canvas.toBuffer('image/jpeg');
+      const buf = this.chartService.generateChartFromBody(id, body);
       res.set({ 'Content-Type': 'image/jpeg' });
-      res.send(buffer);
+      res.send(buf);
     } catch (e) {
       return res
         .status(HttpStatus.FAILED_DEPENDENCY)

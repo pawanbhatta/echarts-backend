@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Chart } from './schemas/chart.schema';
 import * as Mongoose from 'mongoose';
 import { EChartsOption, color } from 'echarts';
+import { Canvas, createCanvas } from 'canvas';
+import * as echarts from 'echarts';
 
 @Injectable()
 export class ChartService {
@@ -290,6 +292,37 @@ export class ChartService {
       ],
     };
   }
+
+  generateChartFromBody(id: string, data: any): Buffer {
+    const canvas: Canvas = createCanvas(1000, 600);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#000';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fill();
+    const chart = echarts.init(canvas as unknown as HTMLElement);
+
+    try {
+      const options = (() => {
+        switch (id.toLowerCase()) {
+          case 'waterfall':
+          case 'waterfall.jpg':
+            return this.generateWaterfallOptions(data);
+          case 'negative':
+          case 'negative.jpg':
+            return this.generateNegativeOptions(data);
+          default:
+            return this.generateGroupedOptions(data);
+        }
+      })();
+
+      chart.setOption(options);
+      const buffer = canvas.toBuffer('image/jpeg');
+      return buffer;
+    } catch (e) {
+      console.log('error while posting chart image : ', e);
+    }
+  }
+
   async findAll(): Promise<Chart[]> {
     const charts = await this.chartModel.find();
     return charts;
